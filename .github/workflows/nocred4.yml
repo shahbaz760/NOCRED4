@@ -58,20 +58,11 @@ jobs:
                 aws configure set region ${{ secrets.AWS_REGION }}
                 aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
                 echo "login done"
-                pwd
-                touch goli.txt
                 echo "Pulling the latest Docker image"
                 docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-
-                # echo "Stopping any existing container named 'golu'"
-                # docker stop golu || true
-                # docker rm golu || true
-
-                # echo "Running the Docker container"
-                # docker run -d --name golu -p 8080:8080 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-
-                # # Optional cleanup
-                # echo "Cleaning up unused Docker resources"
-                # docker system prune -a --force
+                echo "run container"
+                docker run -d --name golu -p 8080:8080 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+                echo "Cleaning up unused Docker resources"
+                docker system prune -a --force
             EOF
  
