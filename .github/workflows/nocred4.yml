@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-            set -x
+            set -u
             ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
                 echo "Logging into AWS ECR"
                 aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
