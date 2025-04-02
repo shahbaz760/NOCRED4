@@ -48,17 +48,17 @@ jobs:
                     ssh -o StrictHostKeyChecking=no ubuntu@3.145.89.175 << 'EOF'
                         set -e
                         echo "Docker Login"
-                        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 400908163598.dkr.ecr.us-east-2.amazonaws.com
-                        docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-                        echo "pull done"
-                        docker logout 
-                        echo "removing older container"
-                        docker rm -f golu-react-webapp
-                        echo "done"
-                        echo "Running New container"
-                        sudo docker run -d --name golu-react-webapp -p 81:80 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-                        echo "Done" 
-                        docker system prune -a --force
+                        # aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 400908163598.dkr.ecr.us-east-2.amazonaws.com
+                        # docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+                        # echo "pull done"
+                        # docker logout 
+                        # echo "removing older container"
+                        # docker rm -f golu-react-webapp
+                        # echo "done"
+                        # echo "Running New container"
+                        # sudo docker run -d --name golu-react-webapp -p 81:80 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+                        # echo "Done" 
+                        # docker system prune -a --force
                     EOF
 
   
