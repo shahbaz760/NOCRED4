@@ -48,6 +48,7 @@ jobs:
                     ssh -o StrictHostKeyChecking=no ubuntu@3.145.89.175 << 'EOF'
                         set -e
                         echo "Docker Login"
+                        aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
                         docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
                         # echo "pull done"
                         # docker logout 
