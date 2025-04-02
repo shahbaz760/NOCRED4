@@ -25,15 +25,15 @@ jobs:
                 ENV: "golu========================="
               run: echo -e "$ENV">.env
 
-    #         - name: Build and Push Docker Image
-    #           run: |
-    #             REPOSITORY_NAME=golu
-    #             IMAGE_TAG=latest
-    #             AWS_ACCOUNT_ID=637527414831
-    #             REGION=us-east-2
-    #             ECR_URI=$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPOSITORY_NAME
-    #             docker build -t $ECR_URI:$IMAGE_TAG .
-    #             docker push $ECR_URI:$IMAGE_TAG
+            - name: Build and Push Docker Image
+              run: |
+                REPOSITORY_NAME=golu
+                IMAGE_TAG=latest
+                AWS_ACCOUNT_ID=423755636060
+                REGION=us-east-2
+                ECR_URI=$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPOSITORY_NAME
+                docker build -t $ECR_URI:$IMAGE_TAG .
+                docker push $ECR_URI:$IMAGE_TAG
              
 
     # deploy:
