@@ -59,7 +59,7 @@ jobs:
                   docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
                   echo "Running the Docker container"
                   docker run -d -p 8080:8080 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-                  # Optional cleanup
-                  # docker system prune -a --force
+                  Optional cleanup
+                  docker system prune -a --force
               EOF
  
