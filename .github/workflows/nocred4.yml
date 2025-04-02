@@ -33,30 +33,30 @@ jobs:
             docker push 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
 
 
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up SSH key for EC2 access # hdghg
-  #       run: |
-  #           mkdir -p ~/.ssh
-  #           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-  #           chmod 600 ~/.ssh/id_rsa
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key for EC2 access # hdghg
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
 
-  #     - name: Configure AWS CLI
-  #       run: |
-  #           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #           aws configure set region ${{ secrets.AWS_REGION }}
+      - name: Configure AWS CLI
+        run: |
+            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws configure set region ${{ secrets.AWS_REGION }}
 
-  #     - name: login to ec2
-  #       run: |
-  #           set -x
-  #           ssh -o StrictHostKeyChecking=no ubuntu@3.145.9.160
-  #           echo "docker login"
-  #           aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
-  #           docker system prune -a --force
-  #           docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-  #           echo "docker pull"
-  #           docker run -p 3000:3000 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-  #           docker system prune -a --force 
+      - name: login to ec2
+        run: |
+            set -x
+            ssh -o StrictHostKeyChecking=no ubuntu@3.145.9.160
+            echo "docker login"
+            aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
+            docker system prune -a --force
+            docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+            echo "docker pull"
+            # docker run -p 3000:3000 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+            # docker system prune -a --force 
