@@ -52,7 +52,7 @@ jobs:
       - name: login to ec2
         run: |
             set -x
-            ssh -o StrictHostKeyChecking=no ubuntu@3.145.56.117
+            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }}
             echo "docker login"
             aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
             docker system prune -a --force
