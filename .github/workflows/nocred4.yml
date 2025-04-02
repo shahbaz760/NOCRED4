@@ -53,6 +53,9 @@ jobs:
         run: |
             ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
                 echo "Successfully connected to EC2!"
+                aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws configure set region ${{ secrets.AWS_REGION }}
                 aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
                 # echo "Pulling the latest Docker image"
                 # docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
