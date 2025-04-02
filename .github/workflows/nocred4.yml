@@ -2,61 +2,62 @@ name: vegeta
 
 on:
   push:
-     branches:
-          - main
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: get_code
+      - name: Get Code
         uses: actions/checkout@v4
 
       - name: Configure AWS CLI
         run: |
-            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws configure set region ${{ secrets.AWS_REGION }}
-          
-      - name: Create env
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ secrets.AWS_REGION }}
+
+      - name: Create Env File
         env:
           ENV: "goluuuuuuuuuuuuuuuuuuu"
-        run: echo $ENV>.env
+        run: echo "$ENV" > .env
 
-      - name: Configure AWS CLI
+      - name: Build, Tag, and Push Docker Image
         run: |
-            aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
-            echo "build"
-            docker build -t golu .
-            echo "tag"
-            docker tag golu:latest 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-            echo "push"
-            docker push 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+          docker build -t golu .
+          docker tag golu:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/golu:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/golu:latest
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Set up SSH key for EC2 access # hdghg
+      - name: Set up SSH Key for EC2 Access
         run: |
-            mkdir -p ~/.ssh
-            echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      - name: Configure AWS CLI
+      - name: Deploy to EC2
         run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
+            echo "Logging into AWS ECR..."
             aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws configure set region ${{ secrets.AWS_REGION }}
 
-      - name: login to ec2
-        run: |
-            set -x
-            ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }}
-            pwd
-            echo "docker login"
-            aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.us-east-2.amazonaws.com
-            docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-            echo "docker pull"
-            docker run -d -p 8080:8080 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-            # docker system prune -a --force  
+            echo "Logging into Docker Registry..."
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+            echo "Pulling Docker Image..."
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/golu:latest
+
+            echo "Running Docker Container..."
+            docker stop golu || true
+            docker rm golu || true
+            docker run -d -p 8080:8080 --name golu ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/golu:latest
+
+            echo "Deployment Complete!"
+          EOF
