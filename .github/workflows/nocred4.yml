@@ -45,7 +45,7 @@ jobs:
 
             - name: SSH into EC2 and execute commands 
               run: |
-                    ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} '
+                    ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
                     set -e
                     echo "Docker Login"
                     aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 400908163598.dkr.ecr.us-east-2.amazonaws.com
