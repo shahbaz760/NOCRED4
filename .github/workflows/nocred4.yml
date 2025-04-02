@@ -26,7 +26,6 @@ jobs:
 
             - name: Build and Push Docker Image
               run: |
-                    aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 423755636060.dkr.ecr.ap-south-1.amazonaws.com
                     docker build -t golu .
                     docker tag golu:latest 423755636060.dkr.ecr.ap-south-1.amazonaws.com/golu:latest
                     docker push 423755636060.dkr.ecr.ap-south-1.amazonaws.com/golu:latest
