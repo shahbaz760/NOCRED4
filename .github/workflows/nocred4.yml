@@ -48,7 +48,7 @@ jobs:
                     ssh -o StrictHostKeyChecking=no ubuntu@3.145.89.175 << 'EOF'
                         set -e
                         echo "Docker Login"
-                        docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+                        docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
                         # echo "pull done"
                         # docker logout 
                         # echo "removing older container"
