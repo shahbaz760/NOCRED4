@@ -49,7 +49,7 @@ jobs:
             aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws configure set region ${{ secrets.AWS_REGION }}
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2  
         run: |
             ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
                 echo "Successfully connected to EC2!"
