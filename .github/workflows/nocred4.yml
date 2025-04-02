@@ -58,5 +58,5 @@ jobs:
             docker system prune -a --force
             docker pull 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
             echo "docker pull"
-            # docker run -p 3000:3000 637527414831.dkr.ecr.us-east-2.amazonaws.com/golu:latest
-            # docker system prune -a --force 
+            docker run -p 8080:8080 423755636060.dkr.ecr.us-east-2.amazonaws.com/golu:latest
+            docker system prune -a --force 
