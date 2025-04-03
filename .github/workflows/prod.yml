@@ -3,7 +3,7 @@ name: vegeta
 on:
   push:
      branches:
-          - PROD
+          - PROD  
 jobs:
   build:
     runs-on: ubuntu-latest
